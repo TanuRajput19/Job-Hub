@@ -8,30 +8,32 @@ import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 
-dotenv.config({});
+dotenv.config();
 
 const app = express();
 
-// middleware
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-app.use(cookieParser());
-// const corsOptions = {
-//     origin:'https://job-hub-frontend.onrender.com',
-//     credentials:true
-// }
-
-// app.use(cors(corsOptions));
+// ✅ CORS setup (ye sabse pehle middleware me hona chahiye)
 app.use(cors({
+    origin: "https://job-hub-frontend.onrender.com",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// ✅ Preflight request handle
+app.options("*", cors({
     origin: "https://job-hub-frontend.onrender.com",
     credentials: true
 }));
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 8000;
 
-
-// api's
+// Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
@@ -39,9 +41,9 @@ app.use("/api/v1/application", applicationRoute);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
-})
+});
 
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     connectDB();
     console.log(`Server running at port ${PORT}`);
-})
+});
