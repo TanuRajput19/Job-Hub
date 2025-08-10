@@ -47,6 +47,9 @@ import cloudinary from "../utils/cloudinary.js";
 //     }
 // }
 export const register = async (req, res) => {
+    console.log(req.body);
+     console.log(req.file);
+
     try {
         const { fullname, email, phoneNumber, password, role } = req.body;
 
@@ -162,14 +165,14 @@ export const login = async (req, res) => {
             profile: user.profile
         };
 
-        // ✅ Cookie settings for cross-origin deployment
+        // ✅ Deployment-friendly cookie settings
         return res
             .status(200)
             .cookie("token", token, {
-                httpOnly: true,       // client-side JS can't access
-                secure: true,         // HTTPS only in production
-                sameSite: "none",     // allow cross-site cookies
-                maxAge: 24 * 60 * 60 * 1000 // 1 day
+                maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+                httpOnly: true,
+                secure: true, // because Render uses HTTPS
+                sameSite: 'None' // for cross-site cookie
             })
             .json({
                 message: `Welcome back ${user.fullname}`,
@@ -182,6 +185,7 @@ export const login = async (req, res) => {
         return res.status(500).json({ message: "Server error", success: false });
     }
 };
+
 
 export const logout = async (req, res) => {
     try {
