@@ -17,7 +17,7 @@ app.use(cors({
     origin: "https://job-hub-frontend.onrender.com",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie"]
 }));
 
 // ✅ Preflight request handle
